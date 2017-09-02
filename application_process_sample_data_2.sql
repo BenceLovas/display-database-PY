@@ -1,4 +1,10 @@
+﻿DROP TABLE IF EXISTS applicants_mentors;
 DROP TABLE IF EXISTS applicants;
+DROP TABLE IF EXISTS mentors;
+DROP TABLE IF EXISTS schools;
+DROP SEQUENCE IF EXISTS applicants_id_seq;
+DROP SEQUENCE IF EXISTS mentors_id_seq;
+DROP SEQUENCE IF EXISTS schools_id_seq;
 
 CREATE TABLE applicants (
     id integer NOT NULL,
@@ -15,8 +21,6 @@ CREATE SEQUENCE applicants_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
-
-DROP TABLE IF EXISTS mentors;
 
 CREATE TABLE mentors (
     id integer NOT NULL,
@@ -36,9 +40,24 @@ CREATE SEQUENCE mentors_id_seq
     NO MAXVALUE
     CACHE 1;
 
+CREATE TABLE schools (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    city character varying(255) NOT NULL,
+    country varchar(255) NOT NULL,
+    contact_person int NULL
+);
+
+CREATE SEQUENCE schools_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
 ALTER TABLE ONLY applicants ALTER COLUMN id SET DEFAULT nextval('applicants_id_seq'::regclass);
 ALTER TABLE ONLY mentors ALTER COLUMN id SET DEFAULT nextval('mentors_id_seq'::regclass);
-
+ALTER TABLE ONLY schools ALTER COLUMN id SET DEFAULT nextval('schools_id_seq'::regclass);
 
 INSERT INTO applicants VALUES (1, 'Dominique', 'Williams', '003630/734-4926', 'dolor@laoreet.co.uk', 61823);
 INSERT INTO applicants VALUES (2, 'Jemima', 'Foreman', '003620/834-6898', 'magna@etultrices.net', 58324);
@@ -54,6 +73,7 @@ INSERT INTO applicants VALUES (10, 'Ursa', 'William', '003620/496-7064', 'malesu
 SELECT pg_catalog.setval('applicants_id_seq', 10, true);
 
 
+INSERT INTO mentors VALUES (1, 'Attila', 'Molnár', 'Atesz', '003670/630-0539', 'attila.molnar@codecool.com', 'Budapest', 23);
 INSERT INTO mentors VALUES (2, 'Pál', 'Monoczki', 'Pali', '003630/327-2663', 'pal.monoczki@codecool.com', 'Miskolc', NULL);
 INSERT INTO mentors VALUES (3, 'Sándor', 'Szodoray', 'Szodi', '003620/519-9152', 'sandor.szodoray@codecool.com', 'Miskolc', 7);
 INSERT INTO mentors VALUES (4, 'Dániel', 'Salamon', 'Dani', '003620/508-0706', 'daniel.salamon@codecool.com', 'Budapest', 4);
@@ -75,10 +95,16 @@ INSERT INTO mentors VALUES (19, 'Marcin', 'Izworski', 'Marcin', '003670/999-2323
 INSERT INTO mentors VALUES (20, 'Rafał', 'Stępień', 'Rafal', '003630/323-5343', 'rafal.stepien@codecool.com', 'Krakow', 3);
 INSERT INTO mentors VALUES (21, 'Agnieszka', 'Koszany', 'Agi', '003630/111-5343', 'agnieszka.koszany@codecool.com', 'Krakow', 77);
 INSERT INTO mentors VALUES (22, 'Mateusz', 'Steliga', 'Mateusz', '003630/123-5343', 'mateusz.steliga@codecool.com', 'Krakow', 5);
-INSERT INTO mentors VALUES (1, 'Attila', 'Molnár', 'Atesz', '003670/630-0539', 'attila.molnar@codecool.com', 'Budapest', 23);
-
 
 SELECT pg_catalog.setval('mentors_id_seq', 22, true);
+
+
+INSERT INTO schools (id,name,city,country,contact_person) VALUES (1, 'Codecool Msc','Miskolc','Hungary',1);
+INSERT INTO schools (id,name,city,country,contact_person) VALUES (2, 'Codecool BP','Budapest','Hungary',4);
+INSERT INTO schools (id,name,city,country,contact_person) VALUES (3, 'Codecool Krak','Krakow','Poland',7);
+INSERT INTO schools (id,name,city,country,contact_person) VALUES (4, 'Codecool Wars','Warsaw','Poland',NULL);
+
+SELECT pg_catalog.setval('schools_id_seq', 4, true);
 
 ALTER TABLE ONLY applicants
     ADD CONSTRAINT applicant_pk PRIMARY KEY (id);
@@ -88,3 +114,25 @@ ALTER TABLE ONLY applicants
 
 ALTER TABLE ONLY mentors
     ADD CONSTRAINT mentors_pk PRIMARY KEY (id);
+
+ALTER TABLE ONLY schools
+    ADD CONSTRAINT schools_pk PRIMARY KEY (id);
+
+CREATE TABLE applicants_mentors (
+    applicant_id int REFERENCES applicants(id),
+    mentor_id int REFERENCES mentors(id),
+    creation_date date NOT NULL DEFAULT CURRENT_DATE
+);
+
+INSERT INTO applicants_mentors (applicant_id,mentor_id,creation_date) VALUES (1,1,date '2015-09-28');
+INSERT INTO applicants_mentors (applicant_id,mentor_id,creation_date) VALUES (2,1,date '2015-10-10');
+INSERT INTO applicants_mentors (applicant_id,mentor_id,creation_date) VALUES (3,2,date '2015-10-11');
+INSERT INTO applicants_mentors (applicant_id,mentor_id,creation_date) VALUES (4,3,date '2015-10-11');
+INSERT INTO applicants_mentors (applicant_id,mentor_id,creation_date) VALUES (5,4,date '2016-01-10');
+INSERT INTO applicants_mentors (applicant_id,mentor_id,creation_date) VALUES (6,5,date '2016-03-01');
+INSERT INTO applicants_mentors (applicant_id,mentor_id,creation_date) VALUES (7,5,date '2016-03-12');
+INSERT INTO applicants_mentors (applicant_id,mentor_id,creation_date) VALUES (8,6,date '2016-04-11');
+INSERT INTO applicants_mentors (applicant_id,mentor_id,creation_date) VALUES (9,7,date '2016-05-23');
+
+ALTER TABLE ONLY applicants_mentors
+    ADD CONSTRAINT applicants_mentors_pk PRIMARY KEY (applicant_id, mentor_id)
