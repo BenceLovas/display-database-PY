@@ -5,11 +5,8 @@
         <meta charset="UTF-8">
     </head>
     <body>
-        <a href="{{ url_for('routes', route='mentors') }}">Mentors</a>
-        <a href="{{ url_for('routes', route='all_school') }}">All School</a>
-        <a href="{{ url_for('routes', route='mentors_by_country') }}">Mentors by Country</a>
-        <a href="{{ url_for('routes', route='contacts') }}">Contacts</a>
-        <a href="{{ url_for('routes', route='applicants') }}">Applicants</a>
-        <a href="{{ url_for('routes', route='applicants_and_mentors') }}">Applicants and Mentors</a>
+        {% for title, route in routes_titles %}
+            <a href="{{ url_for('routes', route=route ) }}">{{ title }}</a>
+        {% endfor %}
     </body>
 </html>

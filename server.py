@@ -2,13 +2,17 @@ from flask import Flask, redirect, request, url_for, render_template
 import database_manager
 import queries
 import headers
+import common
 
 app = Flask(__name__)
+ROUTES = ["mentors", "all_school", "mentors_by_country", "contacts", "applicants", "applicants_and_mentors"]
 
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    title_list = common.title_from_route(ROUTES)
+
+    return render_template('index.html', routes_titles=zip(title_list, ROUTES))
 
 
 @app.route('/<route>')
