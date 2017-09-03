@@ -1,4 +1,4 @@
-from flask import Flask, redirect, request, url_for, render_template
+from flask import Flask, url_for, render_template
 import database_manager
 import queries
 import headers
