@@ -5,7 +5,7 @@
         <link rel="shortcut icon" href="{{ url_for('static', filename='freepik.jpg') }}">
     </head>
     <body>
-        {% for title, route in routes_titles %}
+        {% for route, title in routes_titles %}
             <a href="{{ url_for('routes', route=route ) }}">{{ title }}</a>
         {% endfor %}
     </body>

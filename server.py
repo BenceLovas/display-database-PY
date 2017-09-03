@@ -12,7 +12,7 @@ ROUTES = ["mentors", "all_school", "mentors_by_country", "contacts", "applicants
 def index():
     title_list = common.title_from_route(ROUTES)
 
-    return render_template('index.html', routes_titles=zip(title_list, ROUTES))
+    return render_template('index.html', routes_titles=zip(ROUTES, title_list))
 
 
 @app.route('/<route>')
