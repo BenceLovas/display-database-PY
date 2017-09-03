@@ -12,19 +12,7 @@ def index():
 
 @app.route('/<route>')
 def routes(route):
-    if route == 'mentors':
-        sql_str = queries.MENTORS
-    elif route == 'all-school':
-        sql_str = queries.ALL_SCHOOL
-    elif route == 'mentors-by-country':
-        sql_str = queries.MENTORS_BY_COUNTRY
-    elif route == 'contacts':
-        sql_str = queries.CONTACTS
-    elif route == 'applicants':
-        sql_str = queries.APPLICANTS
-    elif route == 'applicants-and-mentors':
-        sql_str = queries.APPLICANTS_AND_MENTORS
-
+    sql_str = getattr(queries, route)
     data = database_manager.select_query(sql_str)
     table_header = list(data[0].keys())
 
