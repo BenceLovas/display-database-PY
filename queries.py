@@ -1,5 +1,6 @@
 
-mentors =                "SELECT mentors.first_name, mentors.last_name, schools.country FROM mentors \
+mentors =                "SELECT mentors.first_name, mentors.last_name, schools.country \
+                          FROM mentors \
                           INNER JOIN schools ON mentors.city = schools.city"
 
 all_school =             "SELECT \
@@ -11,11 +12,13 @@ all_school =             "SELECT \
                           RIGHT JOIN schools ON mentors.city = schools.city \
                           ORDER BY mentors.id"
 
-mentors_by_country =     "SELECT COUNT(mentors.id), schools.country FROM mentors \
+mentors_by_country =     "SELECT COUNT(mentors.id), schools.country \
+                          FROM mentors \
                           INNER JOIN schools ON mentors.city = schools.city \
                           GROUP BY schools.country"
 
-contacts =               "SELECT schools.name, mentors.first_name, mentors.last_name FROM mentors \
+contacts =               "SELECT schools.name, mentors.first_name, mentors.last_name \
+                          FROM mentors \
                           INNER JOIN schools ON mentors.id = schools.contact_person \
                           ORDER BY schools.name"
 
